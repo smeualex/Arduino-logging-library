@@ -120,11 +120,10 @@ void Logging::Verbose(char* msg, ...){
 			}
 
         }
-        if(_autoNewLine == AUTO_NEWLINE_ON)
-            Serial.println(*format);
-        else
-            Serial.print(*format);
+        Serial.print(*format);
     }
+    if(_autoNewLine == AUTO_NEWLINE_ON)
+        Serial.println();
  }
  
  Logging Log = Logging();
