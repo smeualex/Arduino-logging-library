@@ -1,13 +1,23 @@
 #include "Logging.h"
 
-void Logging::Init(int level, long baud){
+void Logging::Enable(){
+    _isEnabled = true;
+}
+
+void Logging::Disable(){
+    _isEnabled = false;
+}
+
+void Logging::Init(int level, long baud, bool autoNewLine){
     _level = constrain(level,LOG_LEVEL_NOOUTPUT,LOG_LEVEL_VERBOSE);
     _baud = baud;
+    _autoNewLine = autoNewLine;
     Serial.begin(_baud);
+    Enable();
 }
 
 void Logging::Error(char* msg, ...){
-    if (LOG_LEVEL_ERRORS <= _level) {   
+    if (_isEnabled && LOG_LEVEL_ERRORS <= _level) {   
 		print ("ERROR: ",0);
         va_list args;
         va_start(args, msg);
@@ -17,7 +27,7 @@ void Logging::Error(char* msg, ...){
 
 
 void Logging::Info(char* msg, ...){
-    if (LOG_LEVEL_INFOS <= _level) {
+    if (_isEnabled && LOG_LEVEL_INFOS <= _level) {
         va_list args;
         va_start(args, msg);
         print(msg,args);
@@ -25,7 +35,7 @@ void Logging::Info(char* msg, ...){
 }
 
 void Logging::Debug(char* msg, ...){
-    if (LOG_LEVEL_DEBUG <= _level) {
+    if (_isEnabled && LOG_LEVEL_DEBUG <= _level) {
         va_list args;
         va_start(args, msg);
         print(msg,args);
@@ -34,7 +44,7 @@ void Logging::Debug(char* msg, ...){
 
 
 void Logging::Verbose(char* msg, ...){
-    if (LOG_LEVEL_VERBOSE <= _level) {
+    if (_isEnabled && LOG_LEVEL_VERBOSE <= _level) {
         va_list args;
         va_start(args, msg);
         print(msg,args);
@@ -87,7 +97,7 @@ void Logging::Verbose(char* msg, ...){
 			}
 
             if( *format == 'c' ) {
-				Serial.print(va_arg( args, int ));
+				Serial.print((char)va_arg( args, int ));
 				continue;
 			}
             if( *format == 't' ) {
@@ -110,7 +120,10 @@ void Logging::Verbose(char* msg, ...){
 			}
 
         }
-        Serial.print(*format);
+        if(_autoNewLine == AUTO_NEWLINE_ON)
+            Serial.println(*format);
+        else
+            Serial.print(*format);
     }
  }
  

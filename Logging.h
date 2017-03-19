@@ -18,13 +18,15 @@ extern "C" {
 #define LOG_LEVEL_INFOS 2
 #define LOG_LEVEL_DEBUG 3
 #define LOG_LEVEL_VERBOSE 4
-
 // default loglevel if nothing is set from user
 #define LOGLEVEL LOG_LEVEL_DEBUG 
 
 
 #define CR "\r\n"
 #define LOGGING_VERSION 1
+
+#define AUTO_NEWLINE_ON  true
+#define AUTO_NEWLINE_OFF false
 
 /*!
 * Logging is a helper class to output informations over
@@ -72,6 +74,8 @@ class Logging {
 private:
     int _level;
     long _baud;
+	bool _autoNewLine;
+	bool _isEnabled;
 public:
     /*! 
 	 * default Constructor
@@ -84,7 +88,7 @@ public:
 	* \return void
 	*
 	*/
-	void Init(int level, long baud);
+	void Init(int level, long baud, bool autoNewLine);
 	
     /**
 	* Output an error message. Output message contains
@@ -134,6 +138,16 @@ public:
     void Verbose(char* msg, ...);   
 
     
+	/**
+	* Disable logging
+	*/
+	void Disable();
+
+	/**
+	* Enable logging
+	*/
+	void Enable();
+
 private:
     void print(const char *format, va_list args);
 };
