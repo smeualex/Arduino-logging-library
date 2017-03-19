@@ -22,6 +22,7 @@ void Logging::Error(char* msg, ...){
         va_list args;
         va_start(args, msg);
         print(msg,args);
+        va_end(args);
     }
 }
 
@@ -31,6 +32,7 @@ void Logging::Info(char* msg, ...){
         va_list args;
         va_start(args, msg);
         print(msg,args);
+        va_end(args);
     }
 }
 
@@ -39,6 +41,7 @@ void Logging::Debug(char* msg, ...){
         va_list args;
         va_start(args, msg);
         print(msg,args);
+        va_end(args);
     }
 }
 
@@ -48,6 +51,7 @@ void Logging::Verbose(char* msg, ...){
         va_list args;
         va_start(args, msg);
         print(msg,args);
+        va_end(args);
     }
 }
 
